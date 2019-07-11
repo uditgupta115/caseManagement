@@ -1,0 +1,32 @@
+{% load staticfiles %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login</title>
+        <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    </head>
+    <body>
+        <div class="login-page">
+            <div class="form">
+<!--                <form class="register-form">-->
+<!--                    <input type="text" placeholder="name"/>-->
+<!--                    <input type="password" placeholder="password"/>-->
+<!--                    <input type="text" placeholder="email address"/>-->
+<!--                    <button>Create</button>-->
+<!--                    <p class="message">Already registered? <a href="#">Sign In</a></p>-->
+<!--                </form>-->
+                <form class="login-form" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="username" placeholder="username"/>
+                    <input type="password" name="password" placeholder="password"/>
+                    <input type="submit" href="{% url 'home_view' }">
+                </form>
+            </div>
+        </div>
+    <script>
+            $('.message a').click(function(){
+                $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+            });
+    </script>
+    </body>
+</html>
