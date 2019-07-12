@@ -8,7 +8,7 @@ from django.views import View
 from django.views.generic import TemplateView
 
 from casemanagement.casesystem.custom_middleware import get_verify_jwt_token
-from casemanagement.casesystem.models import Roles
+from casemanagement.casesystem.models import Roles, Case
 
 
 def user_logout(request):
@@ -56,6 +56,9 @@ class ManagerView(TemplateView):
     def get(self, request, *args, **kwargs):
         if request.session.has_key('_auth_user'):
             auth_hash = request.session['_auth_user']
+
+            all_cases = Case.objects.select_related('task').filter(role__user=Roles.MANAGER)
+            context = {"username": request.user}
             # if auth_hash:
             #     verify_token = get_verify_jwt_token(
             #         request.user.token_secret_key,
@@ -63,7 +66,7 @@ class ManagerView(TemplateView):
             #         True
             #     )
                 # if verify_token:
-            return render(request, self.template_name, {"username": request.user})
+            return render(request, self.template_name, context)
         else:
             return redirect('/login/')
 
