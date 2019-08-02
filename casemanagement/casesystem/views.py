@@ -1,9 +1,11 @@
 import jwt
-from django.contrib.auth import logout, login
+from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 # Create your views here.
+from django.template import RequestContext
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -13,10 +15,9 @@ from casemanagement.casesystem.models import Roles, Case
 
 def user_logout(request):
     loggout_out = logout(request)
-    del request.session['_auth_user']
-    if loggout_out:
-        return HttpResponse('You were logged out from session')
-    return HttpResponse('unable to logout from session')
+    # if loggout_out:
+    return HttpResponse('You were logged out from session')
+    # return HttpResponse('unable to logout from session')
 
 
 class LoginView(View):
@@ -26,13 +27,22 @@ class LoginView(View):
         return render(request, self.template_name, {})
 
     def post(self, request, *args, **kwargs):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user and not isinstance(user, AnonymousUser):
+            login(request, user)
+
+        if hasattr(user, 'userrole'):
+            setattr(request, 'role', user.userrole.role)
+
         role = request.role
         if role == Roles.MANAGER:
             return redirect(to='/manager/')
         elif role == Roles.TASK_MANAGER:
             return redirect(to='/task-manager/')
         else:
-            return HttpResponse("Bad Role for user %s " % request.user)
+            return redirect(to='/404/')
 
 
 class HomePageView(View):
@@ -43,7 +53,7 @@ class HomePageView(View):
             return redirect('/login/')
         role = request.role
         if role == Roles.MANAGER:
-            return redirect(to='/manager/')
+            return redirect('/manager/')
         elif role == Roles.TASK_MANAGER:
             return redirect(to='/task-manager/')
         else:
@@ -54,27 +64,21 @@ class ManagerView(TemplateView):
     template_name = 'casesystem/index.html'
 
     def get(self, request, *args, **kwargs):
-        if request.session.has_key('_auth_user'):
-            auth_hash = request.session['_auth_user']
+        # if request.session.has_key('_auth_user'):
+        #     auth_hash = request.session['_auth_user']
+        #
+        #     all_cases = Case.objects.select_related('task').filter(role__user=Roles.MANAGER)
 
-            all_cases = Case.objects.select_related('task').filter(role__user=Roles.MANAGER)
-            context = {"username": request.user}
-            # if auth_hash:
-            #     verify_token = get_verify_jwt_token(
-            #         request.user.token_secret_key,
-            #         auth_hash,
-            #         True
-            #     )
-                # if verify_token:
-            return render(request, self.template_name, context)
-        else:
-            return redirect('/login/')
+        context = {"username": request.user}
+        #     # if auth_hash:
+        #     #     verify_token = get_verify_jwt_token(
+        #     #         request.user.token_secret_key,
+        #     #         auth_hash,
+        #     #         True
+        #     #     )
+        #     # if verify_token:
+        return render(request, self.template_name, context)
 
 
 class TaskManagerView(TemplateView):
     template_name = 'casesystem/taskmanager_home.html'
-
-
-
-
-

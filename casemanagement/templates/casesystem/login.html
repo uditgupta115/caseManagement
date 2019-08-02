@@ -8,18 +8,18 @@
     <body>
         <div class="login-page">
             <div class="form">
-<!--                <form class="register-form">-->
-<!--                    <input type="text" placeholder="name"/>-->
-<!--                    <input type="password" placeholder="password"/>-->
-<!--                    <input type="text" placeholder="email address"/>-->
-<!--                    <button>Create</button>-->
-<!--                    <p class="message">Already registered? <a href="#">Sign In</a></p>-->
-<!--                </form>-->
-                <form class="login-form" method="post">
+<!--                 <form class="register-form">
+                    <input type="text" placeholder="name"/>
+                    <input type="password" placeholder="password"/>
+                    <input type="text" placeholder="email address"/>
+                    <button>Create</button>
+                    <p class="message">Already registered? <a href="#">Sign In</a></p>
+                </form> -->
+                    <form class="login-form" method="post">
                     {% csrf_token %}
-                    <input type="text" name="username" placeholder="username"/>
-                    <input type="password" name="password" placeholder="password"/>
-                    <input type="submit" href="{% url 'home_view' }">
+                    <input type="text" name="username" required placeholder="username"/>
+                    <input type="password" name="password" required placeholder="password"/>
+                    <input type="submit" href="{% url 'home_view' %}">
                 </form>
             </div>
         </div>

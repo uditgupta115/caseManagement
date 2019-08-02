@@ -4,6 +4,7 @@
         <h1>Case Management</h1>
         <h3>{{ username }}</h3>
         <form>
+            {% csrf_token %}
             <label> Role: {{ form.role }}
             </label>
             <label>Case Name: {{ form.case_name }}</label>

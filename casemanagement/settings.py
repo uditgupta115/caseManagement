@@ -14,7 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJECT_DIR = os.path.join(BASE_DIR, "caseManagement")
+PROJECT_DIR = os.path.join(BASE_DIR, "casemanagement")
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -24,7 +25,7 @@ SECRET_KEY = 'c93z=tmnwfpt&=x$d)b*+c3)gqj)pvdgqhho1ywoh(=n2mcx9!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['testserver', '*']
 
 
 # Application definition
@@ -56,7 +57,7 @@ ROOT_URLCONF = 'casemanagement.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(PROJECT_DIR, "casemanagement", 'templates')],
+        'DIRS': [os.path.join(PROJECT_DIR, 'templates')],
         # 'APP_DIRS': ,
         'OPTIONS': {
             'context_processors': [
@@ -80,18 +81,18 @@ WSGI_APPLICATION = 'casemanagement.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # },
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.mysql',
-        'NAME': 'casemanagement',
-        'USER': 'uditgupta115',
-        'PASSWORD': 'rootroot',
-        'HOST': 'uditgupta115.mysql.pythonanywhere-services.com',
-        'PORT': '3906'
-    }
+     'default': {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+     },
+    #'default': {
+    #    'ENGINE': 'django.contrib.gis.db.backends.mysql',
+    #    'NAME': 'casemanagement',
+    #    'USER': 'uditgupta115',
+    #    'PASSWORD': 'rootroot',
+    #    'HOST': 'uditgupta115.mysql.pythonanywhere-services.com',
+    #    'PORT': '3906'
+    #}
 }
 
 AUTH_USER_MODEL = 'casesystem.User'
@@ -133,4 +134,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR + '/static'
+STATIC_ROOT = BASE_DIR + '/static/'

@@ -1,6 +1,13 @@
 from django.contrib import admin
-from casemanagement.casesystem.models import UserRole, Case, Task
+from casemanagement.casesystem.models import UserRole, Case, Task, User
+
+
 # Register your models here.
+
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'first_name')
 
 
 @admin.register(UserRole)

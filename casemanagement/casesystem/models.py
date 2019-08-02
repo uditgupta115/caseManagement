@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=256, null=True, blank=True)
     username = models.CharField(max_length=256, unique=True)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     token_secret_key = models.CharField(max_length=128, unique=True, default=get_random_secret_key)
 
@@ -77,6 +77,12 @@ class Case(models.Model):
     def __str__(self):
         return "ID: %s " % self.pk + self.case_name
 
+    def get_user_role(self):
+        return self.role.user.username
+
+    def get_all_tasks(self):
+        return self.task_set.all()
+
 
 class Task(models.Model):
     case = models.ForeignKey(Case, on_delete=models.DO_NOTHING)
@@ -87,3 +93,6 @@ class Task(models.Model):
 
     def __str__(self):
         return "ID: %s " % self.pk + self.task_name
+
+    def get_case_name(self):
+        return self.case.case_name
