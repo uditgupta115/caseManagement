@@ -10,7 +10,6 @@ def get_verify_jwt_token(encode_string, decoded_string=None, is_for_decode=False
         return str(encoded)
     decoded = jwt.decode(decoded_string, salt, algorithms=['HS256'])
     if decoded == {'_auth_user': encode_string}:
-        print(decoded)
         return True
     return False
 

@@ -2,18 +2,18 @@ from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-# Create your views here.
 from django.views import View
 from django.views.generic import TemplateView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from casemanagement.casesystem.models import Roles
 
 
 def user_logout(request):
-    loggout_out = logout(request)
-    # if loggout_out:
+    logout(request)
     return HttpResponse('You were logged out from session')
-    # return HttpResponse('unable to logout from session')
 
 
 class LoginView(View):
@@ -78,3 +78,11 @@ class ManagerView(TemplateView):
 
 class TaskManagerView(TemplateView):
     template_name = 'casesystem/taskmanager_home.html'
+
+
+class HelloView(View):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        content = {'message': 'Hello, World!'}
+        return HttpResponse('Hello, World!')

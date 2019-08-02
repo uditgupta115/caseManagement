@@ -16,9 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from casemanagement.casesystem import urls as caseurls
+from rest_framework_simplejwt import views as jwt_views
 from casemanagement.casesystem import routers as caserouters
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(caseurls)),
     path('api/', include(caserouters.router.urls)),
+]
+
+urlpatterns += [
+    # Your URLs...
+    path('jwt/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('jwt/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]

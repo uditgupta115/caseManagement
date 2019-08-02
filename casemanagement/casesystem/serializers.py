@@ -16,7 +16,7 @@ class CaseSerializer(serializers.ModelSerializer):
         fields = ('id', 'task', 'role', 'case_name', 'case_status', 'remarks')
 
     def create(self, validated_data):
-        task_data = validated_data.pop('task')
+        task_data = validated_data.pop('task', {})
         case = Case.objects.create(**validated_data)
         if task_data:
             for count, _ in enumerate(task_data):
