@@ -1,7 +1,5 @@
 import jwt
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.middleware import AuthenticationMiddleware
-from django.contrib.auth.models import AnonymousUser
 
 salt = "qwertyuiop"
 

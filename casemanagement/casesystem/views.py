@@ -1,16 +1,12 @@
-import jwt
 from django.contrib.auth import logout, login, authenticate
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 # Create your views here.
-from django.template import RequestContext
 from django.views import View
 from django.views.generic import TemplateView
 
-from casemanagement.casesystem.custom_middleware import get_verify_jwt_token
-from casemanagement.casesystem.models import Roles, Case
+from casemanagement.casesystem.models import Roles
 
 
 def user_logout(request):
