@@ -1,7 +1,7 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.db.models import QuerySet
 from django.test import TestCase, Client
-from selenium.webdriver.android.webdriver import WebDriver
+from selenium.webdriver.firefox.webdriver import WebDriver
 
 from casemanagement.casesystem.models import User, Case, UserRole, Task
 
@@ -41,27 +41,26 @@ class UserCase(TestCase):
 
 class LoginViewCase(TestCase):
 
-    def test_manager_login_function(self):
+    def setUp(self) -> None:
         initial_setup()
+
+    def test_manager_login_function(self):
         c = Client()
         login = c.post('/login/', {'username': 'root', 'password': 'root'})
         self.assertURLEqual(login.url, '/manager/')
 
     def test_task_manager_login_function(self):
-        initial_setup()
         c = Client(enforce_csrf_checks=False)
         login = c.post('/login/', {'username': 'daffo', 'password': 'root'})
         # self.assertEqual(login.status_code, 200)
         self.assertURLEqual(login.get, '/task-manager/')
 
     def test_get_login_page(self):
-        initial_setup()
         c = Client()
         login = c.get('/login/')
         self.assertEqual(login.status_code, 200)
 
     def test_create_case_system_via_api(self):
-        initial_setup()
         c = Client()
         login = c.post(
             '/api/case/',
@@ -74,14 +73,13 @@ class LoginViewCase(TestCase):
                     }
                 ],
                 "case_name": "case_via_api_test",
-             },
+            },
             headers={'Content-Type': 'application/json'}
         )
         # create status code
         self.assertEqual(login.status_code, 201)
 
     def test_update_case_system_via_api(self):
-        initial_setup()
         c = Client()
         response = c.patch(
             '/api/case/1/',
@@ -94,13 +92,12 @@ class LoginViewCase(TestCase):
                     }
                 ],
                 "case_name": "case_via_api_test_update",
-             },
+            },
             content_type='application/json'
         )
         self.assertEqual(response.status_code, 200)
 
     def test_get_case_system_via_api(self):
-        initial_setup()
         c = Client()
         response = c.get(
             '/api/case/1/',
@@ -108,7 +105,6 @@ class LoginViewCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_delete_case_system_via_api(self):
-        initial_setup()
         c = Client()
         response = c.delete(
             '/api/case/1/',
@@ -125,7 +121,6 @@ class TestHelloView(TestCase):
 
 
 class MySeleniumTests(StaticLiveServerTestCase):
-    # fixtures = ['user-data.json']
 
     @classmethod
     def setUpClass(cls):
