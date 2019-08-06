@@ -22,7 +22,9 @@ class CaseViewSet(GenericModelViewSet):
     parser_classes = (JSONParser, MultiPartParser)
     # permission_classes = (CasePermissions, )
 
-
+    def perform_destroy(self, instance):
+        instance.task_set.all().delete()
+        instance.delete()
 
 
 

@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 import jwt
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin, AbstractUser
 from django.core.management.utils import get_random_secret_key
 from django.db import models
 
@@ -31,26 +31,11 @@ class Roles:
     TASK_MANAGER = 2
 
 
-class User(AbstractBaseUser, PermissionsMixin):
-    first_name = models.CharField(
-        max_length=128, blank=True, null=True, default=''
-    )
-    middle_name = models.CharField(
-        max_length=128, blank=True, null=True, default=''
-    )
-    last_name = models.CharField(
-        max_length=128, blank=True, null=True, default=''
-    )
-    email = models.EmailField(max_length=256, null=True, blank=True)
-    username = models.CharField(max_length=256, unique=True)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=False)
+class User(AbstractUser):
+
     token_secret_key = models.CharField(max_length=128, unique=True, default=get_random_secret_key)
 
     USERNAME_FIELD = 'username'
-
-    objects = UserManager()
 
     def __str__(self):
         return self.username
@@ -96,6 +81,12 @@ class UserRole(models.Model):
     def __str__(self):
         return "%s - %s" % (self.user, self.get_role_display())
 
+    def get_all_tasks(self):
+        return self.task_set.all()
+
+    def get_all_cases(self):
+        return self.case_set.all()
+
 
 class Case(models.Model):
     role = models.ForeignKey(UserRole, on_delete=models.DO_NOTHING)
@@ -122,6 +113,9 @@ class Task(models.Model):
 
     def __str__(self):
         return "ID: %s " % self.pk + self.task_name
+
+    def get_user_role(self):
+        return self.role.user.username
 
     def get_case_name(self):
         return self.case.case_name

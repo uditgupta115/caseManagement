@@ -24,7 +24,7 @@ class CaseSerializer(serializers.ModelSerializer):
         return case
 
     def update(self, case, validated_data):
-        task_data = validated_data.pop('task')
+        task_data = validated_data.pop('task', {})
         if task_data:
             task_set = case.task_set.all()
             for count, task in enumerate(task_data):

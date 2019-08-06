@@ -81,18 +81,19 @@ WSGI_APPLICATION = 'casemanagement.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-     },
-    #'default': {
-    #    'ENGINE': 'django.contrib.gis.db.backends.mysql',
-    #    'NAME': 'casemanagement',
-    #    'USER': 'uditgupta115',
-    #    'PASSWORD': 'rootroot',
-    #    'HOST': 'uditgupta115.mysql.pythonanywhere-services.com',
-    #    'PORT': '3906'
-    #}
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.mysql',
+            'NAME': 'casesystem',
+            'USER': 'root',
+            'PASSWORD': 'root',
+            'HOST': 'localhost',
+            'PORT': '3906'
+        },
+        'test_database': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        },
+
 }
 
 AUTH_USER_MODEL = 'casesystem.User'
@@ -142,6 +143,5 @@ REST_FRAMEWORK = {
     ],
 }
 
-
-
+# TEST_RUNNER = 'casemanagement.casesystem.tests.NoDBTestRunner'
 
