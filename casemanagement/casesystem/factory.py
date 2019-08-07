@@ -1,6 +1,9 @@
 import factory
+from faker import Factory
 
 from casemanagement.casesystem.models import User, UserRole, Case, Task
+
+fake_data = Factory.create()
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -11,7 +14,7 @@ class UserFactory(factory.DjangoModelFactory):
         model = User
         django_get_or_create = ('username',)
 
-    username = 'john'
+    username = factory.LazyAttribute(lambda _: fake_data.user_name())
 
 
 class UserRoleFactory(factory.DjangoModelFactory):
@@ -21,7 +24,7 @@ class UserRoleFactory(factory.DjangoModelFactory):
     class Meta:
         model = UserRole
 
-    role = 1
+    role = fake_data.random.randint(1, 2)
     user = factory.SubFactory(UserFactory)
 
 
@@ -32,8 +35,10 @@ class CaseFactory(factory.DjangoModelFactory):
     class Meta:
         model = Case
 
-    case_name = "case_"
-    role = UserRoleFactory()
+    case_name = factory.LazyAttribute(lambda _: fake_data.name())
+    role = factory.SubFactory(UserRoleFactory)
+    case_status = fake_data.random.randint(1, 4)
+    remarks = fake_data.sentence()
 
 
 class TaskFactory(factory.DjangoModelFactory):
@@ -43,4 +48,8 @@ class TaskFactory(factory.DjangoModelFactory):
     class Meta:
         model = Task
 
-    task_name = "task_"
+    task_name = factory.LazyAttribute(lambda _: fake_data.name())
+    role = factory.SubFactory(UserRoleFactory)
+    task_status = fake_data.random.randint(1, 4)
+    remarks = fake_data.sentence()
+    case = factory.SubFactory(CaseFactory)

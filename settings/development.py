@@ -83,19 +83,19 @@ WSGI_APPLICATION = 'casemanagement.wsgi.application'
 DATABASES = {
         'default': {
             'ENGINE': 'django.contrib.gis.db.backends.mysql',
-            'NAME': 'casesystem',
-            'USER': 'root',
-            'PASSWORD': 'root',
-            'HOST': 'localhost',
-            'PORT': '3906'
+            'NAME': 'ka01BFfxz2',
+            'USER': 'ka01BFfxz2',
+            'PASSWORD': '01wpjKuCj4',
+            'HOST': '37.59.55.185',
+            'PORT': '3306',
         },
-        'test_database': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        },
-
+        # 'default': {
+        #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #     'ENGINE': 'django.db.backends.sqlite3',
+        # },
 }
-
+# python manage.py test --settings=mysite.settings_local
+# 
 AUTH_USER_MODEL = 'casesystem.User'
 
 # Password validation
@@ -143,5 +143,5 @@ REST_FRAMEWORK = {
     ],
 }
 
-# TEST_RUNNER = 'casemanagement.casesystem.tests.NoDBTestRunner'
+# TEST_RUNNER = 'casemanagement.casesystem.testcasedb_setup.CustomDiscoverRunner'
 
