@@ -94,8 +94,7 @@ DATABASES = {
         #     'ENGINE': 'django.db.backends.sqlite3',
         # },
 }
-# python manage.py test --settings=mysite.settings_local
-# 
+
 AUTH_USER_MODEL = 'casesystem.User'
 
 # Password validation
@@ -103,16 +102,20 @@ AUTH_USER_MODEL = 'casesystem.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'NumericPasswordValidator',
     },
 ]
 
@@ -142,6 +145,3 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
-
-# TEST_RUNNER = 'casemanagement.casesystem.testcasedb_setup.CustomDiscoverRunner'
-

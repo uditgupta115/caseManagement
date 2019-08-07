@@ -1,8 +1,9 @@
 from django.db.models import QuerySet
 from django.test import TestCase, Client
 from faker import Factory
-import factory
-from casemanagement.casesystem.factory import UserFactory, UserRoleFactory, CaseFactory, TaskFactory
+
+from casemanagement.casesystem.factory import UserFactory, UserRoleFactory, \
+    CaseFactory, TaskFactory
 from casemanagement.casesystem.models import Case, Task
 
 # from selenium.webdriver.firefox.webdriver import WebDriver
@@ -14,33 +15,44 @@ fake = Factory.create()
 class CustomTestCase(TestCase):
 
     def setUp(self) -> None:
-        # self.case1_user = User.objects.create(username='case1', is_active=True)
-        # self.case2_user = User.objects.create(username='case2', is_active=True)
+        # self.case1_user = User.objects.create(username='case1',
+        #                                       is_active=True)
+        # self.case2_user = User.objects.create(username='case2',
+        #                                       is_active=True)
         # self.task1_user = User.objects.create(username='task1')
         # self.task2_user = User.objects.create(username='task2')
         # self.set_password(self.case1_user, 'root')
         # self.set_password(self.case2_user, 'root')
         # self.set_password(self.task1_user, 'root')
         # self.set_password(self.task2_user, 'root')
-        # self.ur_case_1 = UserRole.objects.create(user=self.case1_user, role=1)
-        # self.ur_case_2 = UserRole.objects.create(user=self.case2_user, role=1)
-        # self.ur_task_1 = UserRole.objects.create(user=self.task1_user, role=2)
-        # self.ur_task_2 = UserRole.objects.create(user=self.task2_user, role=2)
-        # self.case1 = Case.objects.create(role=self.ur_case_1, case_name="test_case1")
-        # self.case2 = Case.objects.create(role=self.ur_case_2, case_name="test_case2")
-        # self.task1 = Task.objects.create(role=self.ur_task_1, case=self.case1, task_name="test_task1")
-        # self.task2 = Task.objects.create(role=self.ur_task_1, case=self.case1, task_name="test_task2")
-        # self.task3 = Task.objects.create(role=self.ur_task_2, case=self.case2, task_name="test_task3")
-        # self.task4 = Task.objects.create(role=self.ur_task_2, case=self.case2, task_name="test_task4")
-        # self.user1 = self.user2 = self.user3 = self.user4 = self.userrole1 = self.userrole2 = self.userrole3\
-        #     = self.userrole4 = self.case1 = self.case2 = self.task1 = self.task2 = self.task3 = self.task4 = None
+        # self.ur_case_1 = UserRole.objects.create(
+        #     user=self.case1_user, role=1)
+        # self.ur_case_2 = UserRole.objects.create(
+        #     user=self.case2_user, role=1)
+        # self.ur_task_1 = UserRole.objects.create(
+        #     user=self.task1_user, role=2)
+        # self.ur_task_2 = UserRole.objects.create(
+        #     user=self.task2_user, role=2)
+        # self.case1 = Case.objects.create(role=self.ur_case_1,
+        #                                  case_name="test_case1")
+        # self.case2 = Case.objects.create(role=self.ur_case_2,
+        #                                  case_name="test_case2")
+        self.task1 = Task.objects.create(
+            role=self.ur_task_1, case=self.case1, task_name="test_task1")
+        self.task2 = Task.objects.create(
+            role=self.ur_task_1, case=self.case1, task_name="test_task2")
+        self.task3 = Task.objects.create(
+            role=self.ur_task_2, case=self.case2, task_name="test_task3")
+        self.task4 = Task.objects.create(
+            role=self.ur_task_2, case=self.case2, task_name="test_task4")
+
         for i in range(1, 5):
             setattr(self, 'user%s' % i, UserFactory(username=fake.name()))
             self.set_password(getattr(self, 'user%s' % i), 'root')
 
         for i in range(1, 5):
-            setattr(self, 'userrole%s' % i, UserRoleFactory(user=getattr(self, 'user%s' % i),
-                                                            role=1 if i < 3 else 2))
+            setattr(self, 'userrole%s' % i, UserRoleFactory(
+                user=getattr(self, 'user%s' % i), role=1 if i < 3 else 2))
 
         for i in range(1, 3):
             setattr(self, 'case%s' % i, CaseFactory(
@@ -70,7 +82,8 @@ class CustomTestCase(TestCase):
 #         self.userrole1 = UserRoleFactory(user=self.user1, role=1)
 #         self.userrole2 = UserRoleFactory(user=self.user2, role=2)
 #         self.case1 = CaseFactory(role=self.userrole1, case_name="test_case")
-#         self.case2 = TaskFactory(role=self.userrole2, case_id=1, task_name="test_task")
+#         self.case2 = TaskFactory(role=self.userrole2, case_id=1,
+#         task_name="test_task")
 
 
 class UserCase(CustomTestCase):
@@ -81,17 +94,20 @@ class UserCase(CustomTestCase):
     def test_get_case_username(self):
         case1 = Case.objects.get(id=self.case1.pk)
         self.assertEqual(case1.get_user_role(), self.case1.role.user.username)
-        self.assertNotEqual(case1.get_user_role(), self.case2.role.user.username)
+        self.assertNotEqual(case1.get_user_role(),
+                            self.case2.role.user.username)
 
     def test_get_task_username(self):
         task1 = Task.objects.get(id=self.task1.pk)
         self.assertEqual(task1.get_user_role(), self.task1.role.user.username)
-        self.assertNotEqual(task1.get_user_role(), self.task2.role.user.username)
+        self.assertNotEqual(task1.get_user_role(),
+                            self.task2.role.user.username)
 
     def test_cases_all_tasks(self):
         case1 = Case.objects.get(id=self.case1.pk)
         self.assertEqual(type(case1.get_all_tasks()), QuerySet)
-        self.assertEqual(case1.get_all_tasks().count(), Task.objects.filter(case=self.case1).count())
+        self.assertEqual(case1.get_all_tasks().count(),
+                         Task.objects.filter(case=self.case1).count())
 
     def test_test_case_name(self):
         task1 = Task.objects.get(id=self.task1.pk)
@@ -101,7 +117,8 @@ class UserCase(CustomTestCase):
 
 class LoginViewTestCase(CustomTestCase):
     """
-        checking whether login redirecting functionality is landing on correct page or not.
+    checking whether login redirecting functionality is
+    landing on correct page or not.
     """
 
     def test_manager_login_with_correct_credentials(self):
@@ -155,12 +172,15 @@ class CaseSystemApiCases(CustomTestCase):
         )
         # checking whether object is being created or not
         self.assertEqual(response.status_code, 201)
-        self.assertIsInstance(Case.objects.get(case_name='case_via_api_test'), Case)
-        # self.assertIsInstance(Task.objects.get(task_name='task_via_api_test'), Task)
+        self.assertIsInstance(Case.objects.get(case_name='case_via_api_test'),
+                              Case)
+        # self.assertIsInstance(Task.objects.get(
+        # task_name='task_via_api_test'), Task)
 
     def test_update_case_system_via_api(self):
         c = Client()
-        self.assertEqual(Case.objects.get(id=self.case1.pk).case_name, self.case1.case_name)
+        self.assertEqual(Case.objects.get(id=self.case1.pk).case_name,
+                         self.case1.case_name)
         response = c.patch(
             '/api/case/%s/' % self.case1.pk,
             {
@@ -176,7 +196,8 @@ class CaseSystemApiCases(CustomTestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(Case.objects.get(id=self.case1.pk).case_name, 'case_via_api_test_update')
+        self.assertEqual(Case.objects.get(id=self.case1.pk).case_name,
+                         'case_via_api_test_update')
 
     def test_get_case_system_via_api(self):
         c = Client()
@@ -184,7 +205,8 @@ class CaseSystemApiCases(CustomTestCase):
             '/api/case/%s/' % self.case1.pk,
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['case_name'], Case.objects.get(id=self.case1.pk).case_name)
+        self.assertEqual(response.json()['case_name'],
+                         Case.objects.get(id=self.case1.pk).case_name)
 
     def test_delete_case_system_via_api(self):
         c = Client()

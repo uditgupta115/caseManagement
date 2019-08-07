@@ -7,7 +7,7 @@ from django.db import ConnectionHandler
 from django.test.runner import DiscoverRunner
 from django.test.utils import get_unique_databases_and_mirrors
 
-from casemanagement.settings import BASE_DIR
+from settings.development import BASE_DIR
 
 DEFAULT_DB_ALIAS = 'default'
 
@@ -24,24 +24,30 @@ class CustomConnectionHandler(ConnectionHandler):
                 },
             }
         if DEFAULT_DB_ALIAS not in self._databases:
-            raise ImproperlyConfigured("You must define a '%s' database." % DEFAULT_DB_ALIAS)
+            raise ImproperlyConfigured("You must define a '%s' database."
+                                       % DEFAULT_DB_ALIAS)
         if self._databases[DEFAULT_DB_ALIAS] == {}:
-            self._databases[DEFAULT_DB_ALIAS]['ENGINE'] = 'django.db.backends.dummy'
+            self._databases[DEFAULT_DB_ALIAS]['ENGINE'] =\
+                'django.db.backends.dummy'
         return self._databases
 
 
 connections = ConnectionHandler()
 
 
-def _setup_databases(verbosity, interactive, keepdb=False, debug_sql=False, parallel=0, aliases=None, **kwargs):
+def _setup_databases(verbosity, interactive, keepdb=False, debug_sql=False,
+                     parallel=0, aliases=None, **kwargs):
     """Create the test databases."""
     mirrored_aliases = {}
 
     # overriding the test database with localsetup
-    test_databases = OrderedDict([((os.path.join(BASE_DIR, 'db.sqlite3'), 'test_database'),
-                                   (os.path.join(BASE_DIR, 'db.sqlite3'), {'test_database'}))])
+    test_databases = OrderedDict([((os.path.join(BASE_DIR, 'db.sqlite3'),
+                                    'test_database'),
+                                   (os.path.join(BASE_DIR, 'db.sqlite3'),
+                                    {'test_database'}))])
 
-    test_databases, mirrored_aliases = get_unique_databases_and_mirrors(aliases)
+    test_databases, mirrored_aliases = get_unique_databases_and_mirrors(
+                                                            aliases)
     old_names = []
     for db_name, aliases in test_databases.values():
         first_alias = None
@@ -56,7 +62,8 @@ def _setup_databases(verbosity, interactive, keepdb=False, debug_sql=False, para
                     verbosity=verbosity,
                     autoclobber=not interactive,
                     keepdb=keepdb,
-                    serialize=connection.settings_dict.get('TEST', {}).get('SERIALIZE', True),
+                    serialize=connection.settings_dict.get('TEST', {}).get(
+                        'SERIALIZE', True),
                 )
                 if parallel > 1:
                     for index in range(parallel):
@@ -67,7 +74,8 @@ def _setup_databases(verbosity, interactive, keepdb=False, debug_sql=False, para
                         )
             # Configure all other connections as mirrors of the first one
             else:
-                connections[alias].creation.set_as_test_mirror(connections[first_alias].settings_dict)
+                connections[alias].creation.set_as_test_mirror(
+                    connections[first_alias].settings_dict)
 
     # Configure the test mirrors.
     for alias, mirror_alias in mirrored_aliases.items():
