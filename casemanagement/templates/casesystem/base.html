@@ -22,7 +22,7 @@
     <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
 </div>
     <section>
-        <div class="leftpanel">
+        <div class="leftpanel"  style="background-color: steelblue">
             <!-- leftpanel -->
             <div class="logopanel">
 
@@ -37,13 +37,15 @@
                             <h4>{{ user.get_full_name }}</h4>
                         </div>
                     </div>
-                    <h5 class="sidebartitle actitle">Account</h5>
-                        <li><a href="{% url 'logout' %}" class="logOutLink"><i class="fa fa-sign-out"></i>
-                            <span>Sign Out</span></a>
-                        </li>
-                    </ul>
+                    <div style="position: absolute; top: 3%; left: 80%;" class="sidebartitle actitle">
+                        <p>Account</p>
+                        <a href="{% url 'logout' %}" class="logOutLink"><i class="fa fa-sign-out"></i>
+                                <span>Sign Out</span></a>
+                        </div>
                 </div>
             </div>
+            {%  block content %}
+            {%  endblock %}
             <!-- leftpanelinner -->
         </div>
         <!-- leftpanel -->

@@ -1,3 +1,4 @@
+import mock
 from django.db.models import QuerySet
 from django.test import TestCase, Client
 from faker import Factory
@@ -37,14 +38,14 @@ class CustomTestCase(TestCase):
         #                                  case_name="test_case1")
         # self.case2 = Case.objects.create(role=self.ur_case_2,
         #                                  case_name="test_case2")
-        self.task1 = Task.objects.create(
-            role=self.ur_task_1, case=self.case1, task_name="test_task1")
-        self.task2 = Task.objects.create(
-            role=self.ur_task_1, case=self.case1, task_name="test_task2")
-        self.task3 = Task.objects.create(
-            role=self.ur_task_2, case=self.case2, task_name="test_task3")
-        self.task4 = Task.objects.create(
-            role=self.ur_task_2, case=self.case2, task_name="test_task4")
+        # self.task1 = Task.objects.create(
+        #     role=self.ur_task_1, case=self.case1, task_name="test_task1")
+        # self.task2 = Task.objects.create(
+        #     role=self.ur_task_1, case=self.case1, task_name="test_task2")
+        # self.task3 = Task.objects.create(
+        #     role=self.ur_task_2, case=self.case2, task_name="test_task3")
+        # self.task4 = Task.objects.create(
+        #     role=self.ur_task_2, case=self.case2, task_name="test_task4")
 
         for i in range(1, 5):
             setattr(self, 'user%s' % i, UserFactory(username=fake.name()))
@@ -217,6 +218,34 @@ class CaseSystemApiCases(CustomTestCase):
         # empty response status as destroy mixins return the same
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Case.objects.filter(id=self.case1.pk).count(), 0)
+
+
+# class CaseSystemApiMockCases(CustomTestCase):
+#     """
+#     Testing CRUD Operations with Mock Functionality.
+#     """
+#
+#     @mock.patch('test_create_case_system_via_mock')
+#     def test_create_case_system_via_mock(self):
+#         c = Client()
+#         response = c.post(
+#             '/api/case/',
+#             data={
+#                 "role": 1,
+#                 "task": [{
+#                     "task_name": "task_via_api_test",
+#                     "role": 2,
+#                 }],
+#                 "case_name": "case_via_api_test",
+#             },
+#             headers={'Content-Type': 'application/json'}
+#         )
+#         # checking whether object is being created or not
+#         self.assertEqual(response.status_code, 201)
+#         self.assertIsInstance(
+#             Case.objects.get(case_name='case_via_api_test'), Case)
+#         # self.assertIsInstance(Task.objects.get(
+#         # task_name='task_via_api_test'), Task)
 
 
 class TestHelloView(TestCase):

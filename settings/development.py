@@ -38,8 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'casemanagement.casesystem',
-    'rest_framework'
 ]
+
+INSTALLED_APPS += [
+    'rest_framework',
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -83,10 +87,14 @@ WSGI_APPLICATION = 'casemanagement.wsgi.application'
 DATABASES = {
         'default': {
             'ENGINE': 'django.contrib.gis.db.backends.mysql',
-            'NAME': 'ka01BFfxz2',
-            'USER': 'ka01BFfxz2',
-            'PASSWORD': '01wpjKuCj4',
-            'HOST': '37.59.55.185',
+            # 'NAME': 'ka01BFfxz2',
+            # 'USER': 'ka01BFfxz2',
+            # 'PASSWORD': '01wpjKuCj4',
+            # 'HOST': '37.59.55.185',
+            'NAME': 'casesystem',
+            'USER': 'root',
+            'PASSWORD': 'root',
+            'HOST': 'localhost',
             'PORT': '3306',
         },
         # 'default': {
@@ -145,3 +153,20 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
+
+# AWS S3 settings
+#
+# AWS_ACCESS_KEY_ID = ''
+# AWS_SECRET_ACCESS_KEY = ''
+# AWS_STORAGE_BUCKET_NAME = 'casemanagementsystem'
+# AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+# AWS_S3_OBJECT_PARAMETERS = {
+#     'CacheControl': 'max-age=86400',
+# }
+# AWS_LOCATION = 'static'
+
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'casemanagement/casesystem', 'static'),
+# ]
+# STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

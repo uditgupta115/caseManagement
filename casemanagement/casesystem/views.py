@@ -1,5 +1,7 @@
 from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -8,12 +10,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from casemanagement.casesystem.models import Roles
+from casemanagement.casesystem.models import Roles, Case, Task
 
 
 def user_logout(request):
     logout(request)
-    return HttpResponse('You were logged out from session')
+    return redirect('/login/')
 
 
 class LoginView(View):
@@ -26,6 +28,8 @@ class LoginView(View):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
+        if not user:
+            return HttpResponse('Invalid Credentials')
         if user and not isinstance(user, AnonymousUser):
             login(request, user)
 
@@ -42,7 +46,7 @@ class LoginView(View):
 
 
 class HomePageView(View):
-    template_name = 'casesystem/index.html'
+    template_name = 'casesystem/base.html'
 
     def get(self, request, *args, **kwargs):
         if not request.user or isinstance(request.user, AnonymousUser):
@@ -57,15 +61,13 @@ class HomePageView(View):
 
 
 class ManagerView(TemplateView):
-    template_name = 'casesystem/index.html'
+    template_name = 'casesystem/manager_home.html'
 
     def get(self, request, *args, **kwargs):
-        # if request.session.has_key('_auth_user'):
-        #     auth_hash = request.session['_auth_user']
-        #
-        #     all_cases = Case.objects.select_related('task').filter(role__user=Roles.MANAGER)
 
-        context = {"username": request.user}
+        cases = Case.objects.filter(role__user=request.user)
+
+        context = {"username": request.user, 'cases': cases}
         #     # if auth_hash:
         #     #     verify_token = get_verify_jwt_token(
         #     #         request.user.token_secret_key,
@@ -79,10 +81,17 @@ class ManagerView(TemplateView):
 class TaskManagerView(TemplateView):
     template_name = 'casesystem/taskmanager_home.html'
 
+    def get(self, request, *args, **kwargs):
+
+        tasks = Task.objects.filter(
+            Q(role__user=request.user) | Q(case__role__user=request.user)
+        ).distinct()
+        context = {"username": request.user, 'tasks': tasks}
+        return render(request, self.template_name, context)
+
 
 class HelloView(View):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        content = {'message': 'Hello, World!'}
         return HttpResponse('Hello, World!')

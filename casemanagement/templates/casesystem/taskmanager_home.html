@@ -1,10 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% include 'casesystem/base.html' %}
 
-</body>
-</html>
+{% block content %}
+
+    <div style="text-align: center">
+        <h1>Task Management</h1>
+        <h3>logged in as: {{ request.user|title }}</h3>
+        <br><br>
+        <p style="position: absolute; top: 18%; left: 30%;">
+        Hi, Your Tasks:
+        </p>
+            {%  for i in tasks %}
+                <br>
+                <div style="text-align: center">
+                    {{ i }}
+                </div>
+            {% endfor %}
+    </div>
+    {% endblock content %}

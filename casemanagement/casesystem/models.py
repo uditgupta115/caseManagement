@@ -73,7 +73,8 @@ class UserRole(models.Model):
         (Roles.TASK_MANAGER, "Task Manager"),
     )
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
-    role = models.PositiveSmallIntegerField(blank=True, null=True, choices=ROLE_CHOICES)
+    role = models.PositiveSmallIntegerField(blank=True, null=True,
+                                            choices=ROLE_CHOICES)
 
     class Meta:
         unique_together = ('user', 'role')

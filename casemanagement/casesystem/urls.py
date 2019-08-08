@@ -11,5 +11,5 @@ urlpatterns = [
     path("logout/", views.user_logout, name='logout'),
     path("manager/", views.ManagerView.as_view(), name='manager_view'),
     path("task-manager/", views.TaskManagerView.as_view(), name='manager_view'),
-    path("404/", page_not_found, {'exception': Exception(Http404)}),
+    path("404/", page_not_found, {'exception': Exception(Http404), 'template_name': 'casesystem/404.html'}),
     ]
