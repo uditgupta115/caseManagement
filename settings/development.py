@@ -85,22 +85,22 @@ WSGI_APPLICATION = 'casemanagement.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.contrib.gis.db.backends.mysql',
-            # 'NAME': 'ka01BFfxz2',
-            # 'USER': 'ka01BFfxz2',
-            # 'PASSWORD': '01wpjKuCj4',
-            # 'HOST': '37.59.55.185',
-            'NAME': 'casesystem',
-            'USER': 'root',
-            'PASSWORD': 'root',
-            'HOST': 'localhost',
-            'PORT': '3306',
-        },
         # 'default': {
-        #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        #     'ENGINE': 'django.db.backends.sqlite3',
+        #     'ENGINE': 'django.contrib.gis.db.backends.mysql',
+        #     # 'NAME': 'ka01BFfxz2',
+        #     # 'USER': 'ka01BFfxz2',
+        #     # 'PASSWORD': '01wpjKuCj4',
+        #     # 'HOST': '37.59.55.185',
+        #     'NAME': 'casesystem',
+        #     'USER': 'root',
+        #     'PASSWORD': 'root',
+        #     'HOST': 'localhost',
+        #     'PORT': '3306',
         # },
+        'default': {
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.sqlite3',
+        },
 }
 
 AUTH_USER_MODEL = 'casesystem.User'
@@ -165,8 +165,8 @@ REST_FRAMEWORK = {
 # }
 # AWS_LOCATION = 'static'
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'casemanagement/casesystem', 'static'),
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'casemanagement/casesystem', 'static'),
+]
 # STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
