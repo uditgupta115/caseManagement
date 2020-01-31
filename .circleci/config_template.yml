@@ -1,0 +1,164 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: moneygeek/aapryl-ci:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - setup_remote_docker
+
+#      - run:
+#          name: Compile
+#          command: python -m compileall .
+
+#  test:
+#    docker:
+#      - image: moneygeek/aapryl-ci:latest
+#      - image: circleci/redis:latest
+#
+#    working_directory: ~/repo
+#
+#    steps:
+#      - checkout
+#
+#      - restore_cache:
+#          keys:
+#            - v4-dependencies-{{ checksum "requirements.txt" }}
+#            - v4-dependencies-
+#
+#      - run: . venv/bin/activate
+#
+#      - run:
+#          name: Pytest
+#          command: pytest || true
+
+  deploy_qa:
+    docker:
+      - image: moneygeek/aapryl-ci:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: Build Container
+          command: docker build -t aapryl-flask -f Dockerfile.flask .
+
+      - run:
+          name: AWS Login
+          command: $(aws ecr --no-include-email get-login)
+
+      - run:
+          name: Push Container
+          command: |
+            docker tag aapryl-flask:latest 460721410364.dkr.ecr.us-east-1.amazonaws.com/aapryl-flask:qa
+            docker push 460721410364.dkr.ecr.us-east-1.amazonaws.com/aapryl-flask:qa
+
+      - run:
+          name: AWS ECS Refresh
+          command: aws ecs update-service --cluster=aapryl-python-backend --service=aapryl-backend-qa --force-new-deployment
+
+  deploy_staging:
+    docker:
+      - image: moneygeek/aapryl-ci:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - setup_remote_docker
+
+      - run:
+          name: Build Container
+          command: docker build -t aapryl-flask -f Dockerfile.flask .
+
+      - run:
+          name: AWS Login
+          command: $(aws ecr --no-include-email get-login)
+
+      - run:
+          name: Push Container
+          command: |
+            docker tag aapryl-flask:latest 460721410364.dkr.ecr.us-east-1.amazonaws.com/aapryl-flask:staging
+            docker push 460721410364.dkr.ecr.us-east-1.amazonaws.com/aapryl-flask:staging
+
+      - run:
+          name: AWS ECS Refresh
+          command: aws ecs update-service --cluster=aapryl-python-backend --service=aapryl-backend-staging --force-new-deployment
+
+  deploy_production:
+    docker:
+      - image: moneygeek/aapryl-ci:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - setup_remote_docker
+
+      - run:
+          name: Build Container
+          command: docker build -t aapryl-flask -f Dockerfile.flask .
+
+      - run:
+          name: AWS Login
+          command: $(aws ecr --no-include-email get-login)
+
+      - run:
+          name: Push Container
+          command: |
+            docker tag aapryl-flask:latest 460721410364.dkr.ecr.us-east-1.amazonaws.com/aapryl-flask:prod
+            docker push 460721410364.dkr.ecr.us-east-1.amazonaws.com/aapryl-flask:prod
+
+      - run:
+          name: AWS ECS Refresh
+          command: aws ecs update-service --cluster=aapryl-python-backend --service=aapryl-backend-prod --force-new-deployment
+
+workflows:
+  version: 2
+  build_test_deply:
+    jobs:
+#      - build
+#      - test:
+#          requires:
+#            - build
+      - approve_for_qa:
+          type: approval
+#          requires:
+#            - build
+          filters:
+            branches:
+              only:
+                - qa
+      - deploy_qa:
+          requires:
+            - approve_for_qa
+      - approve_for_staging:
+          type: approval
+#          requires:
+#            - build
+          filters:
+            branches:
+              only:
+                - staging
+      - deploy_staging:
+          requires:
+            - approve_for_staging
+      - approve_for_production:
+          type: approval
+#          requires:
+#            - build
+          filters:
+            branches:
+              only:
+                - master
+      - deploy_production:
+          requires:
+            - approve_for_production
