@@ -17,6 +17,8 @@ def get_verify_jwt_token(encode_string, decoded_string=None, is_for_decode=False
 class CustomMiddleware(AuthenticationMiddleware):
     def process_request(self, request):
         super(CustomMiddleware, self).process_request(request)
+        for attr, value in request.POST.items():
+            setattr(request.POST, attr, value)
         setattr(request, 'role', 0)
         user = request.user
         if user and hasattr(user, 'userrole'):

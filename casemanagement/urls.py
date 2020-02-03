@@ -20,7 +20,7 @@ from casemanagement.casesystem import urls as caseurls
 from rest_framework_simplejwt import views as jwt_views
 from casemanagement.casesystem import routers as caserouters
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('', include(caseurls)),
     path('api/', include(caserouters.router.urls)),
 ]

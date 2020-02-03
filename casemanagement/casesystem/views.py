@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from casemanagement.casesystem.models import Roles, Case, Task
+from casemanagement.casesystem.models import Roles, Case, Task, User
 
 
 def user_logout(request):
@@ -95,3 +95,33 @@ class HelloView(View):
 
     def get(self, request):
         return HttpResponse('Hello, World!')
+
+
+class SignupView(View):
+    template_name = 'casesystem/signup_page.html'
+
+    def post(self, request):
+        post_data = request.POST
+        total_user = User.objects.count()
+        u = User.objects.create(
+            first_name=post_data.first_name,
+            last_name=post_data.last_name,
+            email=post_data.email,
+            username=post_data.username,
+        )
+        admin_success = False
+        u.set_password(post_data.password)
+        if total_user == 0:
+            u.is_superuser = True
+            u.is_staff = True
+            u.is_active = True
+            admin_success = True
+
+        u.save()
+
+        if admin_success:
+            return redirect('/admin')
+        return redirect('/login')
+
+    def get(self, request):
+        return render(request, self.template_name, {})

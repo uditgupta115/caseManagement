@@ -1,0 +1,39 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>SignUp Page</title>
+        <link rel="stylesheet" href="{% static 'casesystem/css/login.css' %}">
+    </head>
+    <body>
+        <div class="login-page">
+            <div class="form">
+                    <form class="login-form" method="post">
+                    <h3>Enter your details to Signup</h3>
+                    {% csrf_token %}
+                        <label>
+                            <input type="text" name="first_name" required placeholder="First Name"/>
+                        </label>
+                        <label>
+                            <input type="text" name="last_name" required placeholder="Last Name"/>
+                        </label>
+                        <label>
+                            <input type="text" name="username" required placeholder="User Name"/>
+                        </label>
+                        <label>
+                            <input type="email" name="email" required placeholder="Email"/>
+                        </label>
+                        <label>
+                            <input type="password" name="password" required placeholder="Password"/>
+                        </label>
+                        <input type="submit" name="submit" href="{% url 'signup' %}">
+                </form>
+            </div>
+        </div>
+    <script>
+            $('.message a').click(function(){
+                $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+            });
+    </script>
+    </body>
+</html>

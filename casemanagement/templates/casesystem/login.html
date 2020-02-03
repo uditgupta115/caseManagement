@@ -9,12 +9,21 @@
         <div class="login-page">
             <div class="form">
                     <form class="login-form" method="post">
-                    <h3>Enter your Login Credentials</h3>
-                    {% csrf_token %}
-                    <input type="text" name="username" required placeholder="username"/>
-                    <input type="password" name="password" required placeholder="password"/>
-                    <input type="submit" name="submit" href="{% url 'home_view' %}">
+                        <h3>Enter your Login Credentials</h3>
+                        {% csrf_token %}
+                        <label>
+                            <input type="text" name="username" required placeholder="username"/>
+                        </label>
+                        <label>
+                            <input type="password" name="password" required placeholder="password"/>
+                        </label>
+                        <input type="submit" name="submit" href="{% url 'home_view' %}">
                 </form>
+            <div>
+                <p>Not a account yet? SignUp now!</p>
+                <a href="{% url 'signup' %}" class="SignUp"><em class="SignUp"></em>
+                    <span>Sign up</span></a>
+            </div>
             </div>
         </div>
     <script>
