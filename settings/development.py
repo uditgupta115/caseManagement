@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
 INSTALLED_APPS += [
     'rest_framework',
+    'graphene_django'
 ]
 
 MIDDLEWARE = [
@@ -173,3 +174,7 @@ STATICFILES_DIRS = [
 ]
 # STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+GRAPHENE = {
+    'SCHEMA': 'casemanagement.casesystem.graphene_queries.graphene_schema'
+}

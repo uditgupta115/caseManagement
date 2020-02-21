@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from graphene_django.views import GraphQLView
+
 from casemanagement.casesystem import urls as caseurls
 from rest_framework_simplejwt import views as jwt_views
 from casemanagement.casesystem import routers as caserouters
@@ -27,6 +29,8 @@ urlpatterns = [
 
 urlpatterns += [
     # Your URLs...
+    # True for Graphql to be opened in browser else False
+    path("graphql", GraphQLView.as_view(graphiql=True)),
     path('jwt/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('jwt/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]

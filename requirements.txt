@@ -1,3 +1,4 @@
+graphene
 asgiref==3.2.3
 backcall==0.1.0
 boto3==1.11.6
@@ -47,3 +48,4 @@ urllib3==1.25.7
 warrant==0.6.1
 wcwidth==0.1.8
 whitenoise==5.0.1
+graphene-django

@@ -27,6 +27,7 @@ STATUS_CHOICES = (
 
 
 class Roles:
+    ADMIN = 0
     MANAGER = 1
     TASK_MANAGER = 2
 
