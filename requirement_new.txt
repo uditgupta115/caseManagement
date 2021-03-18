@@ -14,7 +14,7 @@ coreschema==0.0.4
 coverage==3.6
 cryptography==2.7
 decorator==4.4.0
-Django==2.2.1
+Django==3.1.6
 django-braces==1.13.0
 django-chatter==1.0.7
 django-filter==2.1.0
